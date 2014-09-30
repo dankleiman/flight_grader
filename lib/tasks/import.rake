@@ -20,5 +20,4 @@ namespace :import do
       c.save!
     end
   end
-
 end
