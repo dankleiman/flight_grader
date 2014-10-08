@@ -31,6 +31,8 @@ namespace :import do
     CSV.foreach(file, headers: true ) do |row|
       c = Airport.find_or_create_by(code: row["Code"])
       c.description = row["Description"]
+      c.name = row["Description"].split(": ").last
+      c.location = row["Description"].split(": ").first
       c.save!
     end
   end

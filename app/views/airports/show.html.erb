@@ -1,0 +1,15 @@
+<h1><%= @airport.name %> (<%= @airport.abbreviation %>)</h1>
+<em><%= @airport.location %></em>
+<ul>
+  <li>On Time Departure Percentage: <%= @airport.on_time_departure_percentage %>%</li>
+  <li>On Time Arrival Percentage: <%= @airport.on_time_arrival_percentage %>%</li>
+  <li>Average Departure Delay: <%= @airport.average_departure_delay %> minutes</li>
+  <li>Average Arrival Delay: <%= @airport.average_arrival_delay %> minutes</li>
+</ul>
+
+<h2>Nearby Airports</h2>
+ <ul>
+  <% @airport.nearby_airports.each do |airport| %>
+     <li><%= link_to(airport.name, airport_path(airport)) %></li>
+    <% end %>
+  </ul>
