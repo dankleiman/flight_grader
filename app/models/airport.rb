@@ -1,6 +1,7 @@
 class Airport < ActiveRecord::Base
   belongs_to :market
   validates :code, presence: true
+  # scope :nearby_airports, -> { Flight.where('origin_airport_id = ?', self.id).where('distance_group = ?', 1)}
 
   def departures
     Flight.where(origin_airport_id: self.id)
@@ -14,7 +15,7 @@ class Airport < ActiveRecord::Base
     origin_airport_id = self.id
     nearby_airports = self.market.airports - [self]
     if nearby_airports.count < 5
-      nearby_airports += Flight.where(origin_airport_id: origin_airport_id).where(distance_group: 1).collect { |flight| flight.destination_airport }.uniq
+      nearby_airports += Airport.find(Flight.where(origin_airport_id: origin_airport_id).where(distance_group: 1).distinctcollect { |flight| flight.destination_airport_id })
     end
     nearby_airports.uniq
   end
