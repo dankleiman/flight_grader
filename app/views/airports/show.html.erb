@@ -13,3 +13,10 @@
      <li><%= link_to(airport.name, airport_path(airport)) %></li>
     <% end %>
   </ul>
+
+<h2>Carriers Flying Out of <%= @airport.abbreviation %></h2>
+ <ul>
+  <% @carriers.each do |carrier| %>
+     <li><%= carrier.description %></li>
+    <% end %>
+  </ul>

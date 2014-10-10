@@ -1,7 +1,6 @@
 class Airport < ActiveRecord::Base
   belongs_to :market
   validates :code, presence: true
-  # scope :nearby_airports, -> { Flight.where('origin_airport_id = ?', self.id).where('distance_group = ?', 1)}
 
   def departures
     Flight.where(origin_airport_id: self.id)
@@ -15,7 +14,7 @@ class Airport < ActiveRecord::Base
     origin_airport_id = self.id
     nearby_airports = self.market.airports - [self]
     if nearby_airports.count < 5
-      nearby_airports += Airport.find(Flight.where(origin_airport_id: origin_airport_id).where(distance_group: 1).distinctcollect { |flight| flight.destination_airport_id })
+      nearby_airports += Airport.find(Flight.where(origin_airport_id: origin_airport_id).where(distance_group: 1).distinct.collect { |flight| flight.destination_airport_id })
     end
     nearby_airports.uniq
   end
@@ -50,12 +49,11 @@ class Airport < ActiveRecord::Base
     Delay.where(flight_id: arrivals).group_by(&:delay_cause).max_by{ |cause, delay| delay.count }.first.cause
   end
 
-  def best_on_time_departure
-    grouped_delays = Delay.where(flight_id: departures).group_by { |delay| delay.flight.carrier }
-    grouped_flights = departures.group_by { |flight| flight.carrier}
-  end
+  # def carrier_with_best_on_time_departure
+  #   grouped_delays = Delay.where(flight_id: departures).group_by { |delay| delay.flight.carrier }
+  # end
 
-  def best_on_time_arrival
-  end
+  # def best_on_time_arrival
+  # end
 
 end
