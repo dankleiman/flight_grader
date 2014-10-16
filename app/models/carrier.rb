@@ -3,6 +3,10 @@ class Carrier < ActiveRecord::Base
   has_many :flights
   has_many :airports, through: :flights, source: :origin_airport
 
+  def self.active
+    Carrier.where(active: true)
+  end
+
   def delayed_flight_ids
     Delay.where(flight_id: self.flights).map {|delay| delay.flight_id}
   end

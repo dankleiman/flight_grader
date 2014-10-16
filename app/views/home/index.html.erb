@@ -15,3 +15,10 @@
     <li><%= link_to(airport.name, airport_path(airport)) %>, <em><%= airport.location %></em> -- On Time Percentage: <%= airport.on_time_departure_percentage %>% </li>
   <% end %>
 </ol>
+
+<h2>Carriers Ranked by On Time Performance</h2>
+<ol>
+  <% @carriers.each do |carrier| %>
+    <li><%= link_to(carrier.description, carrier_path(carrier)) %> -- On Time Percentage: <%= carrier.on_time_percentage %>% </li>
+  <% end %>
+</ol>

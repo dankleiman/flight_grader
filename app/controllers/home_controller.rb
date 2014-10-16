@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
 
   def index
-    # @carriers = Carrier.all.
+    @carriers = Carrier.active.order(:position)
     @airports = Airport.active
   end
 end
