@@ -1,15 +1,13 @@
 <h1><%= @carrier.description %></h1>
 
 <ul>
-  <li>On Time Departure Percentage: <%= @carrier.on_time_departure_percentage %>%</li>
-  <li>On Time Arrival Percentage: <%= @carrier.on_time_arrival_percentage %>%</li>
-  <li>Average Departure Delay: <%= @carrier.average_departure_delay %> minutes</li>
-  <li>Average Arrival Delay: <%= @carrier.average_arrival_delay %> minutes</li>
+  <li>On Time Percentage: <%= @carrier.on_time_percentage %>%</li>
+  <li>Average Delay: <%= @carrier.average_delay %> minutes</li>
 </ul>
 
 <h2><%= @carrier.description %> Flies Out Of</h2>
   <ul>
-  <% @carrier.airports.each do |airport| %>
+  <% @carrier.departs_from.each do |airport| %>
      <li><%= link_to(airport.name, airport_path(airport)) %></li>
     <% end %>
   </ul>

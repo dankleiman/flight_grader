@@ -1,0 +1,17 @@
+<h1>Welcome to Flight Grader</h1>
+<strong>Delays stink!</strong>
+<p>Find out which airports and carriers have the best on time performance.</p>
+
+<h2>Top 20 On Time Airports</h2>
+<ol>
+  <% @airports.order(:position).first(20).each do |airport| %>
+    <li><%= link_to(airport.name, airport_path(airport)) %>, <em><%= airport.location %></em> -- On Time Percentage: <%= airport.on_time_departure_percentage %>% </li>
+  <% end %>
+</ol>
+
+<h2>20 Worst On Time Airports</h2>
+<ol>
+  <% @airports.order(:position).last(20).reverse.each do |airport| %>
+    <li><%= link_to(airport.name, airport_path(airport)) %>, <em><%= airport.location %></em> -- On Time Percentage: <%= airport.on_time_departure_percentage %>% </li>
+  <% end %>
+</ol>

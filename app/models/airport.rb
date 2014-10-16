@@ -1,6 +1,14 @@
 class Airport < ActiveRecord::Base
   belongs_to :market
   validates :code, presence: true
+  has_many :flights, as: :origin_airport
+  has_many :flights, as: :destination_airport
+  has_many :carriers, through: :flights
+  acts_as_list
+
+  def self.active
+    Airport.where(active: true)
+  end
 
   def departures
     Flight.where(origin_airport_id: self.id)
@@ -11,12 +19,11 @@ class Airport < ActiveRecord::Base
   end
 
   def nearby_airports
-    origin_airport_id = self.id
-    nearby_airports = self.market.airports - [self]
-    if nearby_airports.count < 5
-      nearby_airports += Airport.find(Flight.where(origin_airport_id: origin_airport_id).where(distance_group: 1).distinct.collect { |flight| flight.destination_airport_id })
+    nearby_airports = self.market.airports
+    if nearby_airports.count < 6
+      nearby_airports = self.market.airports + Airport.find(Flight.where(origin_airport_id: self.id).where(distance_group: 1).distinct.collect { |flight| flight.destination_airport_id }).sort_by { |airport| airport.on_time_departure_percentage}.reverse.first(6 - nearby_airports.count)
     end
-    nearby_airports.uniq
+    nearby_airports.uniq.sort_by { |airport| airport.on_time_departure_percentage}.reverse
   end
 
   def active?
@@ -41,19 +48,16 @@ class Airport < ActiveRecord::Base
     arrivals.where.not(arrival_delay: 0).average('arrival_delay').to_i
   end
 
-  def most_common_departure_delay
-    Delay.where(flight_id: departures).group_by(&:delay_cause).max_by{ |cause, delay| delay.count }.first.cause
-  end
+  # def most_common_departure_delay
+  #   Delay.where(flight_id: departures).group_by(&:delay_cause).max_by{ |cause, delay| delay.count }.first.cause
+  # end
 
-  def most_common_arrival_delay
-    Delay.where(flight_id: arrivals).group_by(&:delay_cause).max_by{ |cause, delay| delay.count }.first.cause
-  end
+  # def most_common_arrival_delay
+  #   Delay.where(flight_id: arrivals).group_by(&:delay_cause).max_by{ |cause, delay| delay.count }.first.cause
+  # end
 
   # def carrier_with_best_on_time_departure
   #   grouped_delays = Delay.where(flight_id: departures).group_by { |delay| delay.flight.carrier }
-  # end
-
-  # def best_on_time_arrival
   # end
 
 end

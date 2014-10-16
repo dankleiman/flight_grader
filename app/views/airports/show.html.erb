@@ -7,16 +7,20 @@
   <li>Average Arrival Delay: <%= @airport.average_arrival_delay %> minutes</li>
 </ul>
 
-<h2>Nearby Airports</h2>
- <ul>
+<h2>Nearby Airports - Ranked By Best On Time Percentage</h2>
+ <ol>
   <% @airport.nearby_airports.each do |airport| %>
-     <li><%= link_to(airport.name, airport_path(airport)) %></li>
+    <% if airport.id == @airport.id %>
+      <li><%= airport.name %>, <em><%= airport.location %></em> -- On Time Percentage: <%= airport.on_time_departure_percentage %>% </li>
+    <% else %>
+      <li><%= link_to(airport.name, airport_path(airport)) %>, <em><%= airport.location %></em> -- On Time Percentage: <%= airport.on_time_departure_percentage %>% </li>
     <% end %>
-  </ul>
+  <% end %>
+  </ol>
 
 <h2>Carriers Flying Out of <%= @airport.abbreviation %></h2>
  <ul>
   <% @carriers.each do |carrier| %>
-     <li><%= carrier.description %></li>
+     <li><%= link_to(carrier.description, carrier_path(carrier)) %></li>
     <% end %>
   </ul>
