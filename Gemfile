@@ -27,3 +27,5 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 
 gem 'acts_as_list'
+
+gem 'simple_form'

@@ -5,6 +5,7 @@ class Airport < ActiveRecord::Base
   has_many :flights, as: :destination_airport
   has_many :carriers, through: :flights
   acts_as_list
+  attr_accessor :volume
 
   def self.active
     Airport.where(active: true)
@@ -48,16 +49,15 @@ class Airport < ActiveRecord::Base
     arrivals.where.not(arrival_delay: 0).average('arrival_delay').to_i
   end
 
-  # def most_common_departure_delay
-  #   Delay.where(flight_id: departures).group_by(&:delay_cause).max_by{ |cause, delay| delay.count }.first.cause
-  # end
-
-  # def most_common_arrival_delay
-  #   Delay.where(flight_id: arrivals).group_by(&:delay_cause).max_by{ |cause, delay| delay.count }.first.cause
-  # end
-
-  # def carrier_with_best_on_time_departure
-  #   grouped_delays = Delay.where(flight_id: departures).group_by { |delay| delay.flight.carrier }
-  # end
+  def volume=(flights)
+    case
+      when flights > 2000
+        'large'
+      when (flights <= 2000 && flights > 1000)
+        'medium'
+      else
+        'small'
+    end
+  end
 
 end
